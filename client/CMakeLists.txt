@@ -80,24 +80,37 @@ file(GLOB GAME_EVENTS_SOURCES "events/*.cpp")
 # weapon shared code source files
 file(GLOB WEAPONS_SHARED_SOURCES "${CMAKE_SOURCE_DIR}/game_shared/weapons/*.cpp")
 
-# ImGui source files
-list(APPEND IMGUI_SOURCES
-	"ui/vgui_support_int.cpp"
-	"ui/imgui_manager.cpp"
-	"ui/imgui_window_system.cpp"
-	"ui/ui_main.cpp"
-	"ui/ui_demo_window.cpp"
-	"ui/ui_material_editor.cpp"
-	"ui/ui_postfx_menu.cpp"
-)
+# ImGui / in-game editor UI (Emscripten links stubs instead of Dear ImGui)
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+	set(IMGUI_SOURCES
+		"ui/vgui_support_int.cpp"
+		"ui/imgui_web_stub.cpp"
+	)
+else()
+	list(APPEND IMGUI_SOURCES
+		"ui/vgui_support_int.cpp"
+		"ui/imgui_manager.cpp"
+		"ui/imgui_window_system.cpp"
+		"ui/ui_main.cpp"
+		"ui/ui_demo_window.cpp"
+		"ui/ui_material_editor.cpp"
+		"ui/ui_postfx_menu.cpp"
+	)
+endif()
 
 list(APPEND CLDLL_SOURCES ${IMGUI_SOURCES})
 list(APPEND CLDLL_SOURCES ${RENDER_SOURCES})
 list(APPEND CLDLL_SOURCES ${ENTITIES_SOURCES})
 list(APPEND CLDLL_SOURCES ${GAME_EVENTS_SOURCES})
 list(APPEND CLDLL_SOURCES ${WEAPONS_SHARED_SOURCES})
-add_library(${PROJECT_NAME} SHARED ${CLDLL_SOURCES})
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+	add_library(${PROJECT_NAME} MODULE ${CLDLL_SOURCES})
+else()
+	add_library(${PROJECT_NAME} SHARED ${CLDLL_SOURCES})
+endif()
 add_dependencies(${PROJECT_NAME} build_info)
+include(EmscriptenSideModule)
+primext_add_game_module(${PROJECT_NAME} client_emscripten_wasm32)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"."
@@ -161,8 +174,10 @@ if(ENABLE_TRACY_PROFILER)
 endif()
 
 # link dependency libraries
-find_package(imgui CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+	find_package(imgui CONFIG REQUIRED)
+	target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
+endif()
 
 find_package(fmt CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt)

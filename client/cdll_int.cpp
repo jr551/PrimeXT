@@ -173,7 +173,9 @@ extern "C" int DLLEXPORT HUD_VidInit( void )
 {
 	gHUD.VidInit();
 	R_VidInit();
+#ifndef __EMSCRIPTEN__
 	g_ImGuiManager.VidInitialize();
+#endif
 	return 1;
 }
 
@@ -411,6 +413,11 @@ CL_NewMap
 Called always when map is changed or restarted
 ==================
 */
+#ifdef __EMSCRIPTEN__
+extern "C" void IN_ClientMoveEvent( float forwardmove, float sidemove );
+extern "C" void IN_ClientLookEvent( float relyaw, float relpitch );
+#endif
+
 void CL_NewMap()
 {
 	// flush collision meshes cache on clientside
@@ -468,6 +475,19 @@ cldll_func_t cldll_func =
 	NULL,	// HUD_ChatInputPosition,
 	HUD_GetRenderInterface,
 	NULL,	/// HUD_ClipMoveToEntity
+	// Tail matches current Xash3D FWGS. Left null outside Emscripten so the
+	// engine keeps its own mouse/keyboard path on desktop and Android.
+#ifdef __EMSCRIPTEN__
+	NULL,	// IN_ClientTouchEvent
+	IN_ClientMoveEvent,
+	IN_ClientLookEvent,
+#else
+	NULL,
+	NULL,
+	NULL,
+#endif
+	NULL,	// HUD_GetSoundInterface
+	NULL,	// Voice_StartChannel
 };
 
 extern "C" void DLLEXPORT GetClientAPI( void *pv )

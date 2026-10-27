@@ -107,8 +107,14 @@ list(APPEND SVDLL_SOURCES ${MONSTERS_SOURCES})
 list(APPEND SVDLL_SOURCES ${WEAPONS_SOURCES})
 list(APPEND SVDLL_SOURCES ${GAMERULES_SOURCES})
 list(APPEND SVDLL_SOURCES ${WEAPONS_SHARED_SOURCES})
-add_library(${PROJECT_NAME} SHARED ${SVDLL_SOURCES})
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+	add_library(${PROJECT_NAME} MODULE ${SVDLL_SOURCES})
+else()
+	add_library(${PROJECT_NAME} SHARED ${SVDLL_SOURCES})
+endif()
 add_dependencies(${PROJECT_NAME} build_info)
+include(EmscriptenSideModule)
+primext_add_game_module(${PROJECT_NAME} server_emscripten_wasm32)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	"."

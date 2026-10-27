@@ -62,6 +62,14 @@ typedef struct cldll_func_s
 	// Xash3D extension
 	int	(*pfnGetRenderInterface)( int version, render_api_t *renderfuncs, render_interface_t *callback );
 	void	(*pfnClipMoveToEntity)( struct physent_s *pe, const vec3_t start, vec3_t mins, vec3_t maxs, const vec3_t end, struct pmtrace_s *tr );
+	// Xash3D FWGS extension. Same order as current engine/cdll_exp.h.
+	// sound_api_t is not vendored in this tree; the two pointer arguments
+	// match the engine's pfnGetSoundInterface calling convention.
+	int	(*pfnTouchEvent)( int type, int fingerID, float x, float y, float dx, float dy );
+	void	(*pfnMoveEvent)( float forwardmove, float sidemove );
+	void	(*pfnLookEvent)( float relyaw, float relpitch );
+	int	(*pfnGetSoundInterface)( int version, const void *api, void *callback );
+	int	(*pfnVoice_StartChannel)( int samples, byte *data, int entnum );
 } cldll_func_t;
 
 #endif//CDLL_EXP_H

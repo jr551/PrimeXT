@@ -135,6 +135,11 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 }
 #endif
 
+// Side modules hide symbols unless they are exported with C linkage.
+// Windows and Linux builds keep the original signature.
+#if defined(__EMSCRIPTEN__)
+extern "C" DLLEXPORT
+#endif
 int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion)
 {
 	if (!pFunctionTable || interfaceVersion != INTERFACE_VERSION)
@@ -149,6 +154,9 @@ int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion)
 	return TRUE;
 }
 
+#if defined(__EMSCRIPTEN__)
+extern "C" DLLEXPORT
+#endif
 int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion)
 {
 	if (!pFunctionTable || *interfaceVersion != INTERFACE_VERSION)

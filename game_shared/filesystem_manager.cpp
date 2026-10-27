@@ -15,6 +15,7 @@ GNU General Public License for more details.
 
 #include "filesystem_manager.h"
 #include "port.h"
+#include "build.h"
 #include "assert.h"
 #include "stringlib.h"
 #include <fmt/format.h>
@@ -33,7 +34,9 @@ bool fs::CFilesystemManager::Initialize()
 	assert(m_pFileSystem == nullptr);
 
 	std::string path;
-#if XASH_ANDROID
+#if XASH_EMSCRIPTEN
+	path = "filesystem_stdio.wasm";
+#elif XASH_ANDROID
 	path = fmt::format("{}/lib{}", getenv("XASH3D_ENGLIBDIR"), "filesystem_stdio." OS_LIB_EXT);
 #else
 	path = ("filesystem_stdio." OS_LIB_EXT);

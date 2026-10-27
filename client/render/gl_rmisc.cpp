@@ -918,6 +918,12 @@ void R_VidInit( void )
 	glState.width = RENDER_GET_PARM( PARM_SCREEN_WIDTH, 0 );
 	glState.height = RENDER_GET_PARM( PARM_SCREEN_HEIGHT, 0 );
 
+#ifdef __EMSCRIPTEN__
+	// PrimeXT's GL FBO/shader setup calls renderer entry points the webgl2
+	// ref does not implement. The engine's own WebGL renderer draws the world.
+	return;
+#endif
+
 	COpenGLUnitCube::GetInstance().Initialize();
 	CDebugVisualizerBackend::GetInstance().Initialize();
 	CDebugOverlay2D::GetInstance().Initialize();

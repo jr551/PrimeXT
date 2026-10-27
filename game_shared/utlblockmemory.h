@@ -119,8 +119,15 @@ void CUtlBlockMemory<T,I>::Swap( CUtlBlockMemory< T, I > &mem )
 {
 	SWAP( m_pMemory, mem.m_pMemory );
 	SWAP( m_nBlocks, mem.m_nBlocks );
-	SWAP( m_nIndexMask, mem.m_nIndexMask );
-	SWAP( m_nIndexShift, mem.m_nIndexShift );
+	// Clang rejects SWAP() on these bit-fields (Emscripten). Same exchange.
+	{
+		const int mask = m_nIndexMask;
+		const int shift = m_nIndexShift;
+		m_nIndexMask = mem.m_nIndexMask;
+		m_nIndexShift = mem.m_nIndexShift;
+		mem.m_nIndexMask = mask;
+		mem.m_nIndexShift = shift;
+	}
 }
 
 

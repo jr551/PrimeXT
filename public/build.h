@@ -94,6 +94,7 @@ Then you can use another oneliner to query all variables:
 	#define XASH_WIN32 1
 #elif defined __EMSCRIPTEN__
 	#define XASH_EMSCRIPTEN 1
+	#define XASH_POSIX 1
 #elif defined __WATCOMC__ && defined __DOS__
 	#define XASH_DOS4GW 1
 #else // POSIX compatible
