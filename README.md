@@ -85,3 +85,7 @@ cmake .. --preset linux-x64-debug
 cmake --build .
 ```
 6) Compiled binaries will be located in `build` and `build\primext\bin` directories.
+
+## WebAssembly (optional)
+
+An experimental browser build is described in [`web/README.md`](web/README.md). It was generated with AI (Cursor). It is not part of the supported Windows, Linux, or Android workflows, and those builds are left as they were. Drop `web/` and `scripts/build-wasm.sh` if a browser port is out of scope.

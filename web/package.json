@@ -1,0 +1,23 @@
+{
+  "name": "primext-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 43123",
+    "build": "vite build",
+    "preview": "vite preview --port 43123 --host 127.0.0.1",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install chromium"
+  },
+  "dependencies": {
+    "fflate": "0.8.2",
+    "xash3d-fwgs": "1.2.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.52.0",
+    "@types/node": "22.15.30",
+    "typescript": "5.8.3",
+    "vite": "6.3.5"
+  }
+}

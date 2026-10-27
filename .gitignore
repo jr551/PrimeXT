@@ -309,6 +309,9 @@ _Pvt_Extensions
 
 # QtCreator
 build-*
+# Source scripts, not Qt build directories.
+!scripts/build-wasm.sh
+!scripts/build-web.sh
 
 # Android
 *.apk
@@ -346,3 +349,16 @@ compile_commands.json
 
 # KDevelop/Kate project directory metadata
 .directory
+
+# Optional browser port. Build output and demo zips stay local.
+/emsdk/
+/build-wasm/
+/build-wasm-pic/
+/web/node_modules/
+/web/dist/
+/web/test-results/
+/web/playwright-report/
+/web/public/wasm/
+/web/public/xash/
+/web/public/primext/
+/web/public/test/*.zip

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrimeXT Web</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>PrimeXT (browser)</h1>
+        <p id="status">Waiting…</p>
+      </header>
+      <canvas id="canvas" width="960" height="540" tabindex="0"></canvas>
+      <section id="controls">
+        <p>
+          Retail <code>valve</code> assets are not bundled. Use the free
+          <strong>Half-Life: Uplink</strong> demo button (same content as
+          <a href="https://www.moddb.com/downloads/half-life-uplink">ModDB</a>),
+          or open your own install folder. Automated test:
+          <code>?autotest=1</code>.
+        </p>
+        <label class="file">
+          <span>Open Half-Life root folder (contains <code>valve/</code>)</span>
+          <input id="folder" type="file" webkitdirectory multiple />
+        </label>
+        <button id="launch-demo" type="button">Play Half-Life: Uplink demo</button>
+      </section>
+      <pre id="log" aria-live="polite"></pre>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
